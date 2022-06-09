@@ -120,11 +120,11 @@ async function setupPostreSQLDB() {
     ]);
 
     console.log("successfully imported csv data");
-    await pool.end();
     console.log("setup complete");
   } catch (e) {
     console.error(e);
   }
+  await pool.end();
 }
 
 setupPostreSQLDB();
