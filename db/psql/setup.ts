@@ -20,6 +20,7 @@ async function setupPostgreSQLDB() {
   } catch (e) {
     await client.end();
     console.error(e);
+    return;
   }
 
   const pool = new Pool({
