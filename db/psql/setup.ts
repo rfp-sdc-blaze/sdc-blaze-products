@@ -1,7 +1,7 @@
 import { Client, Pool } from "pg";
 require("dotenv").config();
 
-async function setupPostreSQLDB() {
+async function setupPostgreSQLDB() {
   console.log("starting psql setup");
 
   const client = new Client({
@@ -18,6 +18,7 @@ async function setupPostreSQLDB() {
     await client.end();
     console.log("successfully created psql db");
   } catch (e) {
+    await client.end();
     console.error(e);
   }
 
@@ -127,4 +128,4 @@ async function setupPostreSQLDB() {
   await pool.end();
 }
 
-setupPostreSQLDB();
+setupPostgreSQLDB();
