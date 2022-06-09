@@ -1,0 +1,4 @@
+mongo_schema.js
+node_modules
+/.env
+db/mongo
