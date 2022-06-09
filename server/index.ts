@@ -1,5 +1,5 @@
 require("dotenv").config();
-import { getInfo } from "../db/psql";
+import { getInfo, getProductDetails } from "../db/psql";
 import express from "express";
 
 const PORT = process.env.PORT || 3001;
@@ -24,6 +24,16 @@ app.get("/products", async (req, res) => {
     res.sendStatus(400);
   } else {
     res.send(getResult).status(200);
+  }
+});
+
+app.get("/products/:product_id", async (req, res) => {
+  const productId = Number(req.params.product_id);
+  const productDetails = await getProductDetails(productId);
+  if (productDetails === false) {
+    res.sendStatus(400);
+  } else {
+    res.send(productDetails).status(200);
   }
 });
 
