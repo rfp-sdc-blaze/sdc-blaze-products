@@ -21,8 +21,12 @@ export async function getInfo(
 
   try {
     await client.connect();
+
+    const offset = (page - 1) * count;
+    const qValues = [count, offset];
     const infoRes = await client.query(
-      "SELECT * FROM info ORDER BY id LIMIT 10;"
+      "SELECT * FROM info ORDER BY id LIMIT $1 OFFSET $2;",
+      qValues
     );
     await client.end();
     return infoRes.rows;

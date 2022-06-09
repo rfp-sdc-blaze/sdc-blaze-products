@@ -1,5 +1,4 @@
-import { config } from "dotenv";
-config();
+require("dotenv").config();
 import { getInfo } from "../db/psql";
 import express from "express";
 
