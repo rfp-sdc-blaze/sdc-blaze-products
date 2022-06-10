@@ -129,7 +129,7 @@ describe("GET /products/:product_id", () => {
 });
 
 describe("GET /products/:product_id/styles", () => {
-  it("Returns 400 on invalid product ids", async () => {
+  it("Provies error code 400 on invalid product ids", async () => {
     let result = await request(app).get("/products/abc/styles");
     expect(result.statusCode).toEqual(400);
 
@@ -141,11 +141,21 @@ describe("GET /products/:product_id/styles", () => {
   });
 
   it("Provides a styles object when given a valid product id", async () => {
-    // jest.setTimeout(90000);
     let result = await request(app).get("/products/1/styles");
     expect(result.statusCode).toEqual(200);
     expect(result.body.product_id).toEqual("1");
   });
 });
 
-//
+describe("GET /products/:product_id/related", () => {
+  it("Provides error code 400 on invalid product ids", async () => {
+    let result = await request(app).get("/products/abc/related");
+    expect(result.statusCode).toEqual(400);
+
+    result = await request(app).get("/products/0/related");
+    expect(result.statusCode).toEqual(400);
+
+    result = await request(app).get("/products/173827412/related");
+    expect(result.statusCode).toEqual(400);
+  });
+});

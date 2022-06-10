@@ -68,6 +68,10 @@ app.get("/products/:product_id/styles", async (req, res) => {
 });
 
 app.get("/products/:product_id/related", async (req, res) => {
+  if (isNaN(Number(req.params.product_id))) {
+    res.sendStatus(400);
+    return;
+  }
   const productId = Number(req.params.product_id);
   const relatedProducts = await getRelated(productId);
   if (relatedProducts === false) {

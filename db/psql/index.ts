@@ -86,6 +86,7 @@ export async function getProductDetails(
       productId,
     ]);
     if (detailsRes.rows.length === 0) {
+      await client.end();
       return false;
     }
     const featuresRes = await client.query(
@@ -121,6 +122,7 @@ export async function getProductStyles(
       [productId]
     );
     if (stylesRes.rows.length === 0) {
+      await client.end();
       return false;
     }
     const styleIds = stylesRes.rows.map((row) => row.id);
@@ -184,6 +186,9 @@ export async function getRelated(productId: number): Promise<number[] | false> {
     );
 
     await client.end();
+    if (relatedRes.rows.length === 0) {
+      return false;
+    }
     const relatedProducts = relatedRes.rows.map(
       (relObj) => relObj.related_product_id
     );
