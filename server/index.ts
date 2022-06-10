@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.get("/products", async (req, res) => {
   let page = 1;
-  let count = 100;
+  let count = 5;
   if ("count" in req.query) {
     count = Number(req.query.count);
   }
