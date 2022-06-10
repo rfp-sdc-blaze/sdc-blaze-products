@@ -30,7 +30,7 @@ interface SkuObj {
   };
 }
 interface StyleResult {
-  style_id: string;
+  style_id: number;
   name: string;
   original_price: string;
   sale_price: string;
@@ -141,11 +141,14 @@ export async function getProductStyles(
     const results: StyleResult[] = [];
     const productStyles = { product_id: productId.toString(), results };
     styleIds.forEach((styleId, i) => {
-      const curStyle = {
-        style_id: styleId,
+      const curStyle: StyleResult = {
+        style_id: Number(styleId),
         name: stylesRes.rows[i].name,
         original_price: stylesRes.rows[i].original_price,
-        sale_price: stylesRes.rows[i].sale_price,
+        sale_price:
+          stylesRes.rows[i].sale_price === null
+            ? "0"
+            : stylesRes.rows[i].sale_price,
         "default?": stylesRes.rows[i].default_style,
         photos: [...photosRes[i]],
         skus: [...skusRes[i]],
