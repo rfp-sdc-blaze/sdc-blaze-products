@@ -9,7 +9,7 @@ import express from "express";
 
 const PORT = process.env.PORT || 3001;
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 
@@ -61,6 +61,6 @@ app.get("/products/:product_id/related", async (req, res) => {
   }
 });
 
-app.listen(PORT, (): void => {
+export const server = app.listen(PORT, (): void => {
   console.log(`Listening on port ${PORT}`);
 });
