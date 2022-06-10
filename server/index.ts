@@ -1,5 +1,10 @@
 require("dotenv").config();
-import { getInfo, getProductDetails } from "../db/psql";
+import {
+  getInfo,
+  getProductDetails,
+  getProductStyles,
+  getRelated,
+} from "../db/psql";
 import express from "express";
 
 const PORT = process.env.PORT || 3001;
@@ -18,7 +23,6 @@ app.get("/products", async (req, res) => {
     page = Number(req.query.page);
   }
 
-  // console.log(count, page);
   const getResult = await getInfo(count, page);
   if (getResult === false) {
     res.sendStatus(400);
@@ -34,6 +38,26 @@ app.get("/products/:product_id", async (req, res) => {
     res.sendStatus(400);
   } else {
     res.send(productDetails).status(200);
+  }
+});
+
+app.get("/products/:product_id/styles", async (req, res) => {
+  const productId = Number(req.params.product_id);
+  const styleDetails = await getProductStyles(productId);
+  if (styleDetails === false) {
+    res.sendStatus(400);
+  } else {
+    res.send(styleDetails).status(200);
+  }
+});
+
+app.get("/products/:product_id/related", async (req, res) => {
+  const productId = Number(req.params.product_id);
+  const relatedProducts = await getRelated(productId);
+  if (relatedProducts === false) {
+    res.sendStatus(400);
+  } else {
+    res.send(relatedProducts).status(200);
   }
 });
 
