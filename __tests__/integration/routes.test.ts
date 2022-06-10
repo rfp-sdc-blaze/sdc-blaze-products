@@ -71,4 +71,81 @@ describe("GET /products", () => {
     const eighteenthId = result3.body[5].id;
     expect(eighteenthId > sixthId).toEqual(true);
   });
+
+  it("Provides 400 error for invalid page or count query params", async () => {
+    let result = await request(app).get("/products/?page=0");
+    expect(result.statusCode).toEqual(400);
+    result = await request(app).get("/products/?page=-5");
+    expect(result.statusCode).toEqual(400);
+    result = await request(app).get("/products/?page=abc");
+    expect(result.statusCode).toEqual(400);
+    result = await request(app).get("/products/?count=-4");
+    expect(result.statusCode).toEqual(400);
+    result = await request(app).get("/products/?count=def");
+    expect(result.statusCode).toEqual(400);
+    result = await request(app).get("/products/?count=def&page=0");
+    expect(result.statusCode).toEqual(400);
+  });
 });
+
+// getting some errors, probably from using a client that's constantly opening and closing connections rather than a pool
+describe("GET /products/:product_id", () => {
+  it("Provides a product given a valid product id", async () => {
+    let result = await request(app).get("/products/1");
+    expect(result.statusCode).toEqual(200);
+    expect(Array.isArray(result.body)).toEqual(false);
+    expect(typeof result.body).toEqual("object");
+    expect(result.body.id === 1).toEqual(true);
+
+    result = await request(app).get("/products/100");
+    expect(result.statusCode).toEqual(200);
+    expect(Array.isArray(result.body)).toEqual(false);
+    expect(typeof result.body).toEqual("object");
+    expect(result.body.id === 100).toEqual(true);
+
+    result = await request(app).get("/products/5");
+    expect(result.statusCode).toEqual(200);
+    expect(Array.isArray(result.body)).toEqual(false);
+    expect(typeof result.body).toEqual("object");
+    expect(result.body.id === 5).toEqual(true);
+
+    result = await request(app).get("/products/2004");
+    expect(result.statusCode).toEqual(200);
+    expect(Array.isArray(result.body)).toEqual(false);
+    expect(typeof result.body).toEqual("object");
+    expect(result.body.id === 2004).toEqual(true);
+  });
+
+  it("Gives a 400 error given an invalid product id", async () => {
+    let result = await request(app).get("/products/abc");
+    expect(result.statusCode).toEqual(400);
+
+    result = await request(app).get("/products/0");
+    expect(result.statusCode).toEqual(400);
+
+    result = await request(app).get("/products/173827412");
+    expect(result.statusCode).toEqual(400);
+  });
+});
+
+describe("GET /products/:product_id/styles", () => {
+  it("Returns 400 on invalid product ids", async () => {
+    let result = await request(app).get("/products/abc/styles");
+    expect(result.statusCode).toEqual(400);
+
+    result = await request(app).get("/products/0/styles");
+    expect(result.statusCode).toEqual(400);
+
+    result = await request(app).get("/products/173827412/styles");
+    expect(result.statusCode).toEqual(400);
+  });
+
+  it("Provides a styles object when given a valid product id", async () => {
+    // jest.setTimeout(90000);
+    let result = await request(app).get("/products/1/styles");
+    expect(result.statusCode).toEqual(200);
+    expect(result.body.product_id).toEqual("1");
+  });
+});
+
+//

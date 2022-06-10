@@ -82,13 +82,16 @@ export async function getProductDetails(
 
   try {
     await client.connect();
+    const detailsRes = await client.query("SELECT * FROM info WHERE id = $1;", [
+      productId,
+    ]);
+    if (detailsRes.rows.length === 0) {
+      return false;
+    }
     const featuresRes = await client.query(
       "SELECT feature, value FROM features WHERE product_id = $1;",
       [productId]
     );
-    const detailsRes = await client.query("SELECT * FROM info WHERE id = $1;", [
-      productId,
-    ]);
     await client.end();
     const productDetails = {
       ...detailsRes.rows[0],
@@ -117,6 +120,9 @@ export async function getProductStyles(
       `SELECT * FROM styles WHERE productId = $1;`,
       [productId]
     );
+    if (stylesRes.rows.length === 0) {
+      return false;
+    }
     const styleIds = stylesRes.rows.map((row) => row.id);
     const photosRes = await Promise.all(
       styleIds.map(async (id) => {

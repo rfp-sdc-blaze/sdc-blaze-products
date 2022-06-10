@@ -7,7 +7,7 @@
     "start": "nodemon --exec ts-node server/index.ts",
     "build-psql": "ts-node db/psql/setup.ts",
     "build": "tsc",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles --coverage"
   },
   "repository": {
     "type": "git",

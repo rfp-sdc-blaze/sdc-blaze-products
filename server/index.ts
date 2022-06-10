@@ -17,9 +17,17 @@ app.get("/products", async (req, res) => {
   let page = 1;
   let count = 5;
   if ("count" in req.query) {
+    if (isNaN(Number(req.query.count)) || Number(req.query.count) <= 0) {
+      res.sendStatus(400);
+      return;
+    }
     count = Number(req.query.count);
   }
   if ("page" in req.query) {
+    if (isNaN(Number(req.query.page)) || Number(req.query.page) <= 0) {
+      res.sendStatus(400);
+      return;
+    }
     page = Number(req.query.page);
   }
 
@@ -32,6 +40,10 @@ app.get("/products", async (req, res) => {
 });
 
 app.get("/products/:product_id", async (req, res) => {
+  if (isNaN(Number(req.params.product_id))) {
+    res.sendStatus(400);
+    return;
+  }
   const productId = Number(req.params.product_id);
   const productDetails = await getProductDetails(productId);
   if (productDetails === false) {
@@ -42,6 +54,10 @@ app.get("/products/:product_id", async (req, res) => {
 });
 
 app.get("/products/:product_id/styles", async (req, res) => {
+  if (isNaN(Number(req.params.product_id))) {
+    res.sendStatus(400);
+    return;
+  }
   const productId = Number(req.params.product_id);
   const styleDetails = await getProductStyles(productId);
   if (styleDetails === false) {
