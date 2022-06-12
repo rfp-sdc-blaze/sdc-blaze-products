@@ -1,29 +1,32 @@
-require("dotenv").config();
+require('dotenv').config();
+const morgan = require('morgan');
+
 import {
   getInfo,
   getProductDetails,
   getProductStyles,
   getRelated,
-} from "../db/psql";
-import express from "express";
+} from '../db/psql';
+import express from 'express';
 
 const PORT = process.env.PORT || 3001;
 
 export const app = express();
 
 app.use(express.json());
+app.use(morgan('dev'));
 
-app.get("/products", async (req, res) => {
+app.get('/products', async (req, res) => {
   let page = 1;
   let count = 5;
-  if ("count" in req.query) {
+  if ('count' in req.query) {
     if (isNaN(Number(req.query.count)) || Number(req.query.count) <= 0) {
       res.sendStatus(400);
       return;
     }
     count = Number(req.query.count);
   }
-  if ("page" in req.query) {
+  if ('page' in req.query) {
     if (isNaN(Number(req.query.page)) || Number(req.query.page) <= 0) {
       res.sendStatus(400);
       return;
@@ -39,7 +42,7 @@ app.get("/products", async (req, res) => {
   }
 });
 
-app.get("/products/:product_id", async (req, res) => {
+app.get('/products/:product_id', async (req, res) => {
   if (isNaN(Number(req.params.product_id))) {
     res.sendStatus(400);
     return;
@@ -53,7 +56,7 @@ app.get("/products/:product_id", async (req, res) => {
   }
 });
 
-app.get("/products/:product_id/styles", async (req, res) => {
+app.get('/products/:product_id/styles', async (req, res) => {
   if (isNaN(Number(req.params.product_id))) {
     res.sendStatus(400);
     return;
@@ -67,7 +70,7 @@ app.get("/products/:product_id/styles", async (req, res) => {
   }
 });
 
-app.get("/products/:product_id/related", async (req, res) => {
+app.get('/products/:product_id/related', async (req, res) => {
   if (isNaN(Number(req.params.product_id))) {
     res.sendStatus(400);
     return;
