@@ -1,11 +1,11 @@
-import { Client, Pool } from "pg";
-require("dotenv").config();
+import { Client, Pool } from 'pg';
+require('dotenv').config();
 
 async function setupPostgreSQLDB() {
-  console.log("starting psql setup");
+  console.log('starting psql setup');
 
   const client = new Client({
-    database: "template1",
+    database: 'template1',
     user: process.env.DB_USER,
     password: process.env.DB_PW,
   });
@@ -16,7 +16,7 @@ async function setupPostgreSQLDB() {
     await client.query(`DROP DATABASE IF EXISTS products_api;`);
     await client.query(`CREATE DATABASE products_api;`);
     await client.end();
-    console.log("successfully created psql db");
+    console.log('successfully created psql db');
   } catch (e) {
     await client.end();
     console.error(e);
@@ -30,7 +30,7 @@ async function setupPostgreSQLDB() {
   });
 
   try {
-    console.log("setting up schemas...");
+    console.log('setting up schemas...');
     await pool.query(`
       CREATE TABLE IF NOT EXISTS info
       (
@@ -84,8 +84,8 @@ async function setupPostgreSQLDB() {
       )
     `);
 
-    console.log("schemas are setup");
-    console.log("loading csv data...");
+    console.log('schemas are setup');
+    console.log('loading csv data...');
 
     // import csv data (bum bum bummmmmmmmm)
     await Promise.all([
@@ -121,8 +121,17 @@ async function setupPostgreSQLDB() {
       `),
     ]);
 
-    console.log("successfully imported csv data");
-    console.log("setup complete");
+    // await pool.query(`
+    //   CREATE INDEX info_id ON info (id);
+    //   CREATE INDEX features_product_id ON features (product_id);
+    //   CREATE INDEX related_curr_prod_id ON related (current_product_id);
+    //   CREATE INDEX styles_productId ON styles (productId);
+    //   CREATE INDEX skus_styleId ON skus (styleId);
+    //   CREATE INDEX photos_style_id ON photos (style_id);
+    // `);
+
+    console.log('successfully imported csv data');
+    console.log('setup complete');
   } catch (e) {
     console.error(e);
   }
