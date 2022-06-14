@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3001;
 export const app = express();
 
 app.use(express.json());
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 app.get('/products', async (req, res) => {
   let page = 1;
