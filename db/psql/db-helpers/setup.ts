@@ -121,14 +121,14 @@ async function setupPostgreSQLDB() {
       `),
     ]);
 
-    // await pool.query(`
-    //   CREATE INDEX info_id ON info (id);
-    //   CREATE INDEX features_product_id ON features (product_id);
-    //   CREATE INDEX related_curr_prod_id ON related (current_product_id);
-    //   CREATE INDEX styles_productId ON styles (productId);
-    //   CREATE INDEX skus_styleId ON skus (styleId);
-    //   CREATE INDEX photos_style_id ON photos (style_id);
-    // `);
+    await pool.query(`
+      CREATE INDEX info_id ON info (id);
+      CREATE INDEX features_product_id ON features (product_id);
+      CREATE INDEX related_curr_prod_id ON related (current_product_id);
+      CREATE INDEX styles_productId ON styles (productId);
+      CREATE INDEX skus_styleId ON skus (styleId);
+      CREATE INDEX photos_style_id ON photos (style_id);
+    `);
 
     console.log('successfully imported csv data');
     console.log('setup complete');
