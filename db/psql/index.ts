@@ -1,4 +1,10 @@
-import { Client, Pool } from 'pg';
+import { Pool } from 'pg';
+
+export const db = new Pool({
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PW,
+});
 
 interface Info {
   id: number;
@@ -47,26 +53,16 @@ export async function getInfo(
   count: number,
   page: number
 ): Promise<Info[] | false> {
-  const client = new Client({
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PW,
-  });
-
   try {
-    await client.connect();
-
     const offset = (page - 1) * count;
     const qValues = [count, offset];
-    const infoRes = await client.query(
+    const infoRes = await db.query(
       'SELECT * FROM info ORDER BY id LIMIT $1 OFFSET $2;',
       qValues
     );
-    await client.end();
     return infoRes.rows;
   } catch (e) {
     console.error(e);
-    await client.end();
     return false;
   }
 }
@@ -74,15 +70,8 @@ export async function getInfo(
 export async function getProductDetails(
   productId: number
 ): Promise<Details | false> {
-  const client = new Client({
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PW,
-  });
-
   try {
-    await client.connect();
-    const detailsRes = await client.query(
+    const detailsRes = await db.query(
       `SELECT id, name, slogan, description, category, default_price,
       (SELECT json_agg(
         json_build_object(
@@ -93,14 +82,12 @@ export async function getProductDetails(
         FROM info WHERE id = $1;`,
       [productId]
     );
-    await client.end();
     if (detailsRes.rows.length === 0) {
       return false;
     }
     return detailsRes.rows[0];
   } catch (e) {
     console.error(e);
-    await client.end();
     return false;
   }
 }
@@ -108,15 +95,8 @@ export async function getProductDetails(
 export async function getProductStyles(
   productId: number
 ): Promise<Styles | false> {
-  const client = new Client({
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PW,
-  });
-
   try {
-    await client.connect();
-    const stylesRes = await client.query(
+    const stylesRes = await db.query(
       `SELECT json_agg(
         json_build_object(
           'style_id', id,
@@ -143,12 +123,10 @@ export async function getProductStyles(
         )) AS results FROM styles WHERE productId = $1`,
       [productId]
     );
-    await client.end();
     if (stylesRes.rows[0].results === null) {
       const results: StyleResult[] = [];
       stylesRes.rows[0].results = results;
     }
-    // remove null sale price
     for (let i = 0; i < stylesRes.rows[0].results.length; i++) {
       if (stylesRes.rows[0].results[i].sale_price === 'null') {
         stylesRes.rows[0].results[i].sale_price = '0';
@@ -183,26 +161,17 @@ export async function getProductStyles(
     };
   } catch (e) {
     console.error(e);
-    await client.end();
   }
   return false;
 }
 
 export async function getRelated(productId: number): Promise<number[] | false> {
-  const client = new Client({
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PW,
-  });
-
   try {
-    await client.connect();
-    const relatedRes = await client.query(
+    const relatedRes = await db.query(
       'SELECT related_product_id FROM related WHERE current_product_id = $1;',
       [productId]
     );
 
-    await client.end();
     if (relatedRes.rows.length === 0) {
       return false;
     }
@@ -213,7 +182,6 @@ export async function getRelated(productId: number): Promise<number[] | false> {
     return relatedProducts;
   } catch (e) {
     console.error(e);
-    await client.end();
     return false;
   }
 }
