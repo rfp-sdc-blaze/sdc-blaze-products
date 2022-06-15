@@ -125,37 +125,37 @@ export async function getProductStyles(
         )) AS results FROM styles WHERE productId = $1`,
       [productId]
     );
-    if (stylesRes.rows[0].results === null) {
-      const results: StyleResult[] = [];
-      stylesRes.rows[0].results = results;
-    }
-    for (let i = 0; i < stylesRes.rows[0].results.length; i++) {
-      if (stylesRes.rows[0].results[i].sale_price === 'null') {
-        stylesRes.rows[0].results[i].sale_price = '0';
-      }
+    // if (stylesRes.rows[0].results === null) {
+    //   const results: StyleResult[] = [];
+    //   stylesRes.rows[0].results = results;
+    // }
+    // for (let i = 0; i < stylesRes.rows[0].results.length; i++) {
+    //   if (stylesRes.rows[0].results[i].sale_price === 'null') {
+    //     stylesRes.rows[0].results[i].sale_price = '0';
+    //   }
 
-      if (stylesRes.rows[0].results[i].photos === null) {
-        stylesRes.rows[0].results[i].photos = [
-          {
-            thumbnail_url: '',
-            url: '',
-          },
-        ];
-      }
+    //   if (stylesRes.rows[0].results[i].photos === null) {
+    //     stylesRes.rows[0].results[i].photos = [
+    //       {
+    //         thumbnail_url: '',
+    //         url: '',
+    //       },
+    //     ];
+    //   }
 
-      if (stylesRes.rows[0].results[i].skus === null) {
-        stylesRes.rows[0].results[i].skus = [
-          {
-            skus: {
-              1: {
-                quantity: 0,
-                size: 'n/a',
-              },
-            },
-          },
-        ];
-      }
-    }
+    //   if (stylesRes.rows[0].results[i].skus === null) {
+    //     stylesRes.rows[0].results[i].skus = [
+    //       {
+    //         skus: {
+    //           1: {
+    //             quantity: 0,
+    //             size: 'n/a',
+    //           },
+    //         },
+    //       },
+    //     ];
+    //   }
+    // }
 
     return {
       product_id: productId.toString(),
