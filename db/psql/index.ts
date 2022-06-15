@@ -187,9 +187,11 @@ export async function getRelated(productId: number): Promise<number[] | false> {
     //   (relObj) => relObj.related_product_id
     // );
 
-    console.log(relatedRes.rows[0].json_agg);
+    // console.log(relatedRes.rows[0].json_agg);
 
-    return false;
+    return relatedRes.rows[0].json_agg === null
+      ? []
+      : relatedRes.rows[0].json_agg;
   } catch (e) {
     console.error(e);
     return false;
