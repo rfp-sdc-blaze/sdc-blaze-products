@@ -16,6 +16,10 @@ export const app = express();
 app.use(express.json());
 // app.use(morgan('dev'));
 
+app.get('/loaderio-545f58cbc53cf1447db2af90bc72505d.txt', (req, res) => {
+  res.send('loaderio-545f58cbc53cf1447db2af90bc72505d').status(200);
+});
+
 app.get('/products', async (req, res) => {
   let page = 1;
   let count = 5;
