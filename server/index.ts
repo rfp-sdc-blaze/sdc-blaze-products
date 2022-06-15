@@ -14,7 +14,6 @@ const PORT = process.env.PORT || 3001;
 export const app = express();
 
 app.use(express.json());
-// app.use(morgan('dev'));
 
 app.get('/loaderio-545f58cbc53cf1447db2af90bc72505d.txt', (req, res) => {
   res.send('loaderio-545f58cbc53cf1447db2af90bc72505d').status(200);
