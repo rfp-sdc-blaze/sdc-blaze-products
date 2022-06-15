@@ -170,18 +170,26 @@ export async function getProductStyles(
 export async function getRelated(productId: number): Promise<number[] | false> {
   try {
     const relatedRes = await db.query(
-      'SELECT related_product_id FROM related WHERE current_product_id = $1;',
+      `SELECT json_agg(
+        related_product_id
+      ) FROM related WHERE current_product_id = $1;`,
       [productId]
     );
+    // const relatedRes = await db.query(
+    //   'SELECT related_product_id FROM related WHERE current_product_id = $1;',
+    //   [productId]
+    // );
 
     if (relatedRes.rows.length === 0) {
       return false;
     }
-    const relatedProducts = relatedRes.rows.map(
-      (relObj) => relObj.related_product_id
-    );
+    // const relatedProducts = relatedRes.rows.map(
+    //   (relObj) => relObj.related_product_id
+    // );
 
-    return relatedProducts;
+    console.log(relatedRes.rows[0]);
+
+    return false;
   } catch (e) {
     console.error(e);
     return false;
