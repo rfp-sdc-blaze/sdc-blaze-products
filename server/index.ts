@@ -15,8 +15,8 @@ export const app = express();
 
 app.use(express.json());
 
-app.get('/loaderio-545f58cbc53cf1447db2af90bc72505d.txt', (req, res) => {
-  res.send('loaderio-545f58cbc53cf1447db2af90bc72505d').status(200);
+app.get('/loaderio-ef3d1ac553b4b878833558764c279677.txt', (req, res) => {
+  res.send('loaderio-ef3d1ac553b4b878833558764c279677').status(200);
 });
 
 app.get('/products', async (req, res) => {
